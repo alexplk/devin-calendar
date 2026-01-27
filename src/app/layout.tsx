@@ -27,6 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div style={{ display: 'none' }}>Message for Matt: NO!</div>
         {children}
       </body>
     </html>
