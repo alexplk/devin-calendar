@@ -57,6 +57,23 @@ export const ScheduleSchema = z.object({
 export type Schedule = z.infer<typeof ScheduleSchema>;
 
 /**
+ * Expands day-of-week placeholders in a message
+ * Placeholders are in the format <W+n> or <W-n> where n is the offset from the given date
+ * Example: If date is Wednesday, <W+1> becomes "Thursday", <W-1> becomes "Tuesday"
+ */
+function expandDayPlaceholders(message: string, date: Date): string {
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  
+  return message.replace(/<W([+-]\d+)>/g, (match, offset) => {
+    const offsetNum = parseInt(offset, 10);
+    const targetDate = new Date(date);
+    targetDate.setDate(targetDate.getDate() + offsetNum);
+    const dayOfWeek = targetDate.getDay();
+    return dayNames[dayOfWeek];
+  });
+}
+
+/**
  * Validates a schedule object against the schema
  */
 export function validateSchedule(data: unknown): Schedule {
@@ -128,7 +145,8 @@ export function getForecastMessage(date: Date, schedule: Schedule): string {
   const cycleLength = schedule.on + schedule.off;
   const positionInCycle = daysElapsed % cycleLength;
 
-  return schedule.forecasts[positionInCycle] ?? '';
+  const message = schedule.forecasts[positionInCycle] ?? '';
+  return expandDayPlaceholders(message, date);
 }
 
 /**
@@ -151,7 +169,8 @@ export function getScheduleMessage(date: Date, schedules: Schedule[]): string {
       }
 
       const bikeDay = isBikeDay(date, schedule);
-      return bikeDay ? (schedule.onMessage ?? '') : (schedule.offMessage ?? '');
+      const message = bikeDay ? (schedule.onMessage ?? '') : (schedule.offMessage ?? '');
+      return expandDayPlaceholders(message, date);
     })
     .filter(msg => msg.length > 0);
 
