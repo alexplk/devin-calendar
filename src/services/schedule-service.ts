@@ -1,6 +1,30 @@
 import { z } from 'zod';
 
 /**
+ * Loads schedule data from GitHub in production, local file in development
+ * This is a client-side function for use in browser environments
+ */
+export async function loadSchedulesClient(): Promise<unknown[]> {
+  const isGitHubPages = typeof window !== 'undefined' && window.location.hostname === 'alexplk.github.io';
+  
+  if (isGitHubPages) {
+    // In production on GitHub Pages, fetch from main branch
+    const url = 'https://raw.githubusercontent.com/alexplk/devin-calendar/main/src/assets/schedules.json';
+    const response = await fetch(url, { cache: 'no-store' });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to load schedules from GitHub: ${response.statusText}`);
+    }
+    
+    return response.json();
+  } else {
+    // In development, use local data
+    const schedulesData = await import('@/assets/schedules.json');
+    return schedulesData.default;
+  }
+}
+
+/**
  * Schedule schema defines the bike schedule pattern
  * @example
  * {
