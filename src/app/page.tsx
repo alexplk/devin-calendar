@@ -37,7 +37,7 @@ export default function Home() {
     }
     
     loadData();
-  }, [today]);
+  }, []);
 
   const getScheduleData = (year: number, month: number, day: number) => {
     const date = new Date(year, month - 1, day);
