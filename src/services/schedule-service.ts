@@ -94,18 +94,21 @@ export function isBikeDay(date: Date, schedule: Schedule): boolean {
   const startDate = schedule.start ? new Date(schedule.start) : null;
   const endDate = schedule.end ? new Date(schedule.end) : null;
 
+  // Normalize date to midnight for accurate day calculation
+  const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
   // Check if date is within schedule range
-  if (startDate && date < startDate) {
+  if (startDate && normalizedDate < startDate) {
     return false;
   }
-  if (endDate && date > endDate) {
+  if (endDate && normalizedDate > endDate) {
     return false;
   }
 
   // Calculate days elapsed from start (use epoch if no start date)
   const reference = startDate || new Date(0);
   const daysElapsed = Math.floor(
-    (date.getTime() - reference.getTime()) / (1000 * 60 * 60 * 24)
+    (normalizedDate.getTime() - reference.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   const cycleLength = schedule.on + schedule.off;
@@ -128,18 +131,21 @@ export function getForecastMessage(date: Date, schedule: Schedule): string {
   const startDate = schedule.start ? new Date(schedule.start) : null;
   const endDate = schedule.end ? new Date(schedule.end) : null;
 
+  // Normalize date to midnight for accurate day calculation
+  const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
   // Check if date is within schedule range
-  if (startDate && date < startDate) {
+  if (startDate && normalizedDate < startDate) {
     return '';
   }
-  if (endDate && date > endDate) {
+  if (endDate && normalizedDate > endDate) {
     return '';
   }
 
   // Calculate position in cycle
   const reference = startDate || new Date(0);
   const daysElapsed = Math.floor(
-    (date.getTime() - reference.getTime()) / (1000 * 60 * 60 * 24)
+    (normalizedDate.getTime() - reference.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   const cycleLength = schedule.on + schedule.off;
