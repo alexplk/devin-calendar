@@ -1,17 +1,44 @@
+import React from 'react';
 import { Schedule } from '@/services/schedule-service';
 
 interface ForecastWidgetProps {
   date: Date;
   messages: string[];
+  getData?: (year: number, month: number, day: number) => string;
 }
 
-export function ForecastWidget({ date, messages }: ForecastWidgetProps) {
+export function ForecastWidget({ date, messages, getData }: ForecastWidgetProps) {
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
     year: 'numeric',
   });
+
+  // Get the two weeks of days starting from the week containing today
+  const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  
+  // Find Monday of the week containing today
+  const startOfWeek = new Date(date);
+  const currentDay = startOfWeek.getDay();
+  const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
+  startOfWeek.setDate(startOfWeek.getDate() + mondayOffset);
+  
+  // Create two weeks of data
+  const weeks: Date[][] = [[], []];
+  for (let week = 0; week < 2; week++) {
+    for (let day = 0; day < 7; day++) {
+      const currentDate = new Date(startOfWeek);
+      currentDate.setDate(startOfWeek.getDate() + (week * 7) + day);
+      weeks[week].push(currentDate);
+    }
+  }
+
+  const isToday = (checkDate: Date) => {
+    return checkDate.getDate() === date.getDate() &&
+           checkDate.getMonth() === date.getMonth() &&
+           checkDate.getFullYear() === date.getFullYear();
+  };
 
   return (
     <section className="w-full flex justify-center mb-10">
@@ -41,6 +68,86 @@ export function ForecastWidget({ date, messages }: ForecastWidgetProps) {
         ) : (
           <div className="text-center text-gray-400 mt-4 text-xl">No forecast</div>
         )}
+        
+        {/* Two-week calendar */}
+        <div className="mt-8 w-full overflow-x-auto">
+          <table className="border-collapse border-2 border-gray-300 dark:border-gray-700 w-full text-sm table-fixed">
+            <colgroup>
+              {dayNames.map((_, index) => (
+                <col key={index} style={{ width: '14.2857%' }} />
+              ))}
+            </colgroup>
+            <thead>
+              <tr className="border-b-2 border-gray-300 dark:border-gray-700">
+                {dayNames.map((dayName, index) => (
+                  <th
+                    key={dayName}
+                    className={`px-2 py-0.5 text-center font-semibold text-gray-700 dark:text-gray-300 ${
+                      index === 0 ? 'border-l-2' : 'border-l'
+                    } ${
+                      index === 6 ? 'border-r-2' : 'border-r'
+                    } border-gray-300 dark:border-gray-700`}
+                  >
+                    {dayName}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {weeks.map((week, weekIndex) => (
+                <React.Fragment key={weekIndex}>
+                  {/* Day numbers row */}
+                  <tr className="border-b border-gray-200 dark:border-gray-800">
+                    {week.map((dayDate, dayIndex) => {
+                      const isPast = dayDate < date && !isToday(dayDate);
+                      return (
+                        <td
+                          key={dayIndex}
+                          className={`px-2 py-0.5 text-center font-semibold ${
+                            dayIndex === 0 ? 'border-l-2' : 'border-l'
+                          } ${
+                            dayIndex === 6 ? 'border-r-2' : 'border-r'
+                          } border-gray-300 dark:border-gray-700 ${
+                            isPast ? 'text-gray-400 dark:text-gray-600' : 'text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          {isToday(dayDate) ? (
+                            <span className="inline-flex items-center justify-center h-6 w-6 rounded-full border-2 border-red-500">
+                              {dayDate.getDate()}
+                            </span>
+                          ) : (
+                            dayDate.getDate()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                  {/* Data row */}
+                  <tr className={weekIndex === 1 ? 'border-b-2 border-gray-300 dark:border-gray-700' : 'border-b-2 border-gray-300 dark:border-gray-700'}>
+                    {week.map((dayDate, dayIndex) => {
+                      const data = getData?.(dayDate.getFullYear(), dayDate.getMonth() + 1, dayDate.getDate()) || '';
+                      const isPast = dayDate < date && !isToday(dayDate);
+                      return (
+                        <td
+                          key={dayIndex}
+                          className={`px-2 py-1 text-center text-xs ${
+                            dayIndex === 0 ? 'border-l-2' : 'border-l'
+                          } ${
+                            dayIndex === 6 ? 'border-r-2' : 'border-r'
+                          } border-gray-300 dark:border-gray-700 ${
+                            isPast ? 'text-gray-400 dark:text-gray-600' : 'text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          {data}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

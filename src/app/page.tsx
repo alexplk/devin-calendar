@@ -60,7 +60,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <Masthead />
       <main className="flex-1 px-6 pt-0 pb-12">
-        <ForecastWidget date={today} messages={todayForecasts} />
+        <ForecastWidget date={today} messages={todayForecasts} getData={getScheduleData} />
         <div className="flex flex-wrap justify-center gap-8 lg:gap-12">
           <div className="w-full lg:w-auto">
             <Calendar year={currentYear} startMonth={1} endMonth={6} getData={getScheduleData} />
