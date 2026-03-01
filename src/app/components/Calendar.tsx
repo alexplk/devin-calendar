@@ -58,7 +58,7 @@ export function Calendar({ year, startMonth, endMonth, getData }: CalendarProps)
 
   return (
     <div className="overflow-x-auto">
-      <table className="border-collapse border-2 border-gray-300 text-sm dark:border-gray-700">
+      <table className="border-collapse border-2 border-gray-300 text-sm dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 shadow-xl">
         <thead>
           <tr className="border-b-2 border-gray-300 dark:border-gray-700">
             <th

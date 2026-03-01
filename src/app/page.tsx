@@ -5,7 +5,9 @@ import { Masthead } from "./components/Masthead";
 import { Calendar } from "./components/Calendar";
 import { Footer } from "./components/Footer";
 import { ForecastWidget } from "./components/ForecastWidget";
+import { NoBikeBackdrop } from "./components/NoBikeBackdrop";
 import { getScheduleMessage, validateSchedule, getForecastMessage, loadSchedulesClient } from "@/services/schedule-service";
+import { useIsBikeDay } from "@/hooks/useIsBikeDay";
 import type { Schedule } from "@/services/schedule-service";
 
 export default function Home() {
@@ -15,6 +17,8 @@ export default function Home() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [todayForecasts, setTodayForecasts] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const isBikeDay = useIsBikeDay(schedules, today);
 
   useEffect(() => {
     async function loadData() {
@@ -57,20 +61,24 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Masthead />
-      <main className="flex-1 px-6 pt-0 pb-12">
-        <ForecastWidget date={today} messages={todayForecasts} getData={getScheduleData} />
-        <div className="flex flex-wrap justify-center gap-8 lg:gap-12">
-          <div className="w-full lg:w-auto">
-            <Calendar year={currentYear} startMonth={1} endMonth={6} getData={getScheduleData} />
+    <div className="flex min-h-screen flex-col relative">
+      <NoBikeBackdrop show={!isBikeDay} />
+      
+      <div className="relative z-10">
+        <Masthead />
+        <main className="flex-1 px-6 pt-0 pb-12">
+          <ForecastWidget date={today} messages={todayForecasts} getData={getScheduleData} />
+          <div className="flex flex-wrap justify-center gap-8 lg:gap-12">
+            <div className="w-full lg:w-auto">
+              <Calendar year={currentYear} startMonth={1} endMonth={6} getData={getScheduleData} />
+            </div>
+            <div className="w-full lg:w-auto">
+              <Calendar year={currentYear} startMonth={7} endMonth={12} getData={getScheduleData} />
+            </div>
           </div>
-          <div className="w-full lg:w-auto">
-            <Calendar year={currentYear} startMonth={7} endMonth={12} getData={getScheduleData} />
-          </div>
-        </div>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

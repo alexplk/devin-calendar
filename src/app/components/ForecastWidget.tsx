@@ -42,7 +42,7 @@ export function ForecastWidget({ date, messages, getData }: ForecastWidgetProps)
 
   return (
     <section className="w-full flex justify-center mb-10">
-      <div className="relative flex flex-col items-center w-full max-w-2xl rounded-3xl bg-white/90 dark:bg-gray-900/90 shadow-xl px-8 pt-6 pb-10 border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div className="relative flex flex-col items-center w-full max-w-2xl rounded-3xl bg-white/95 dark:bg-gray-900/95 shadow-xl px-8 pt-6 pb-10 border border-gray-200 dark:border-gray-800 overflow-hidden">
         <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
           <span className="inline-block h-4 w-4 rounded-full bg-blue-400 animate-pulse shadow-lg"></span>
           <span className="text-xs font-semibold text-blue-700 dark:text-blue-300 tracking-widest uppercase">Forecast</span>

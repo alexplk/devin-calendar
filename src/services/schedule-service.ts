@@ -115,7 +115,7 @@ export function isBikeDay(date: Date, schedule: Schedule): boolean {
   const positionInCycle = daysElapsed % cycleLength;
 
   // If position is within the "on" days, it's a bike day
-  return positionInCycle < schedule.on;
+  return positionInCycle >= schedule.on;
 }
 
 /**
@@ -175,7 +175,7 @@ export function getScheduleMessage(date: Date, schedules: Schedule[]): string {
       }
 
       const bikeDay = isBikeDay(date, schedule);
-      const message = bikeDay ? (schedule.onMessage ?? '') : (schedule.offMessage ?? '');
+      const message = bikeDay ? (schedule.offMessage ?? '') : (schedule.onMessage ?? '');
       return expandDayPlaceholders(message, date);
     })
     .filter(msg => msg.length > 0);
