@@ -13,12 +13,12 @@ export function NoBikeBackdrop({ show }: NoBikeBackdropProps) {
         <img 
           src="/bike-parts.jpg" 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover dark:invert"
           style={{ objectPosition: 'center' }}
         />
         {/* Gradient overlay to fade out */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white dark:to-gray-950" 
-             style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 70%, white 100%)' }}>
+        <div className="absolute inset-0" 
+             style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 70%, var(--background) 100%)' }}>
         </div>
       </div>
     </div>
