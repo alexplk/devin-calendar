@@ -7,11 +7,14 @@ interface NoBikeBackdropProps {
 export function NoBikeBackdrop({ show }: NoBikeBackdropProps) {
   if (!show) return null;
 
+  // Get base path for GitHub Pages deployment
+  const basePath = process.env.NODE_ENV === 'production' ? '/devin-calendar' : '';
+
   return (
     <div className="absolute left-0 right-0 top-0 overflow-hidden pointer-events-none z-0">
       <div className="relative w-full" style={{ height: '100vh', maxHeight: '800px' }}>
         <img 
-          src="/bike-parts.jpg" 
+          src={`${basePath}/bike-parts.jpg`} 
           alt="" 
           className="absolute inset-0 w-full h-full object-cover dark:invert"
           style={{ objectPosition: 'center' }}
