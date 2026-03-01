@@ -5,7 +5,9 @@ import { Masthead } from "./components/Masthead";
 import { Calendar } from "./components/Calendar";
 import { Footer } from "./components/Footer";
 import { ForecastWidget } from "./components/ForecastWidget";
+import { BikeSlotMachine } from "./components/BikeSlotMachine";
 import { getScheduleMessage, validateSchedule, getForecastMessage, loadSchedulesClient } from "@/services/schedule-service";
+import { getSlotMachineData, getDateBasedSelection } from "@/services/slot-machine-service";
 import type { Schedule } from "@/services/schedule-service";
 
 export default function Home() {
@@ -15,6 +17,10 @@ export default function Home() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [todayForecasts, setTodayForecasts] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Slot machine data
+  const slotData = getSlotMachineData();
+  const todaySelection = getDateBasedSelection(today);
 
   useEffect(() => {
     async function loadData() {
@@ -61,6 +67,17 @@ export default function Home() {
       <Masthead />
       <main className="flex-1 px-6 pt-0 pb-12">
         <ForecastWidget date={today} messages={todayForecasts} getData={getScheduleData} />
+        <BikeSlotMachine
+          effortItems={slotData.effort}
+          tricksItems={slotData.tricks}
+          wildcardItems={slotData.wildcard}
+          selectedEffortId={todaySelection.effortId}
+          selectedTricksId={todaySelection.tricksId}
+          selectedWildcardId={todaySelection.wildcardId}
+          onSpin={(result) => {
+            console.log('Spin result:', result);
+          }}
+        />
         <div className="flex flex-wrap justify-center gap-8 lg:gap-12">
           <div className="w-full lg:w-auto">
             <Calendar year={currentYear} startMonth={1} endMonth={6} getData={getScheduleData} />

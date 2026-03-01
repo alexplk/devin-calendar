@@ -1,0 +1,26 @@
+{
+  "effort": [
+    { "id": "long-distance", "label": "Long Distance", "emoji": "🚴" },
+    { "id": "fast-pace", "label": "Fast Pace", "emoji": "⚡" },
+    { "id": "feature-hunt", "label": "Feature Hunter", "emoji": "🎯" },
+    { "id": "chill-cruise", "label": "Chill Cruise", "emoji": "😎" },
+    { "id": "hill-repeats", "label": "Hill Repeats", "emoji": "⛰️" }
+  ],
+  "tricks": [
+    { "id": "wheelies", "label": "Wheelies", "emoji": "🎪" },
+    { "id": "skinnies", "label": "Skinnies", "emoji": "🌉" },
+    { "id": "drops", "label": "Drops", "emoji": "📉" },
+    { "id": "jumps", "label": "Jumps", "emoji": "🚀" },
+    { "id": "manuals", "label": "Manuals", "emoji": "🎭" },
+    { "id": "technical-climb", "label": "Tech Climb", "emoji": "🧗" }
+  ],
+  "wildcard": [
+    { "id": "heavy-bike", "label": "Heavy Bike", "emoji": "🦏" },
+    { "id": "light-bike", "label": "Light Bike", "emoji": "🦅" },
+    { "id": "cresheim-creek", "label": "Cresheim Creek", "emoji": "🌊" },
+    { "id": "belmont-plateau", "label": "Belmont Plateau", "emoji": "🏔️" },
+    { "id": "forbidden-drive", "label": "Forbidden Drive", "emoji": "🌲" },
+    { "id": "sunset-ride", "label": "Sunset Ride", "emoji": "🌅" },
+    { "id": "night-lights", "label": "Night w/ Lights", "emoji": "🌙" }
+  ]
+}
